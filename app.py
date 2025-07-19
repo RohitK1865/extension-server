@@ -4,23 +4,24 @@ from datetime import datetime
 import pymysql
 import pymysql.cursors
 import re
-import os
 
 app = Flask(__name__)
 CORS(app)
 
-# MySQL Configuration
-DB_HOST = os.getenv("MYSQL_HOST", "localhost")
-DB_USER = os.getenv("MYSQL_USER", "root")
-DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "Moon@1865")
-DB_NAME = os.getenv("MYSQL_DB", "tracklyst")
+# Railway MySQL configuration
+app.config['MYSQL_HOST'] = 'mysql.railway.internal'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'vdpFBVCErgyYYcqYPvBkWxFZsNTTzXzy'
+app.config['MYSQL_DB'] = 'railway'
+app.config['MYSQL_PORT'] = 3306
 
 def get_db_connection():
     return pymysql.connect(
-        host=DB_HOST,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        database=DB_NAME,
+        host=app.config['MYSQL_HOST'],
+        user=app.config['MYSQL_USER'],
+        password=app.config['MYSQL_PASSWORD'],
+        database=app.config['MYSQL_DB'],
+        port=app.config['MYSQL_PORT'],
         cursorclass=pymysql.cursors.DictCursor
     )
 
@@ -152,6 +153,6 @@ def health_check():
 
 if __name__ == '__main__':
     print("🚀 Starting Tracklyst Backend Server...")
-    print("📊 Database: tracklyst")
+    print("📊 Database: railway")
     print("🌐 Server: http://localhost:5000")
     app.run(debug=True, host='0.0.0.0', port=5000)
